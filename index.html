@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Valentine Surprise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
+            overflow: hidden;
+            height: 100vh;
+            transition: background 3s ease;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #fff;
+            text-shadow: 0 0 15px #ff4d6d;
+            margin-bottom: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background: #ff4d6d;
+            color: #fff;
+        }
+
+        #noBtn {
+            position: absolute;
+            background: #444;
+            color: #fff;
+        }
+
+        .hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 24px;
+            animation: float 6s infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-10vh) scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        #quoteText {
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Will you be my Valentine? 💘🌹✨</h1>
+    <button id="yesBtn">Yes 💖😍</button>
+    <button id="noBtn">No 💔😢</button>
+
+    <div class="hearts"></div>
+
+    <!-- Background music starts immediately -->
+    <audio autoplay loop>
+        <source src="I Think They Call This Love (Cover).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+
+        // Floating hearts
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerText = "💖";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+            document.querySelector(".hearts").appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 800);
+
+        // No button runs away
+        noBtn.addEventListener("mouseover", () => {
+            const x = Math.floor(Math.random() * (window.innerWidth - 100));
+            const y = Math.floor(Math.random() * (window.innerHeight - 50));
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        });
+
+        // No button warning
+        function noWarning() {
+            alert("😡 Why would you say No? Try again!");
+            if (navigator.vibrate) navigator.vibrate(300);
+        }
+        noBtn.addEventListener("click", noWarning);
+        noBtn.addEventListener("mousedown", noWarning);
+
+        // Quotes slideshow
+        const quotes = [
+            "A girlfriend is not just a partner, she’s the heartbeat of your world 💕🌎✨",
+            "She’s the smile that makes your day brighter 🌸😊💖",
+            "She’s the reason love feels like magic ✨💫💘",
+            "With her, forever feels too short 💍❤️🌹"
+        ];
+
+        const backgrounds = [
+            "linear-gradient(135deg, #ffdde1, #ee9ca7, #ff758c)",
+            "linear-gradient(135deg, #fbc2eb, #a6c1ee)",
+            "linear-gradient(135deg, #fad0c4, #ffd1ff)",
+            "linear-gradient(135deg, #ff9a9e, #fecfef, #f6d365)"
+        ];
+
+        yesBtn.addEventListener("click", () => {
+            let index = 0;
+            document.body.innerHTML = `
+        <div id="quotePage" style="text-align:center; margin-top:100px; color:white;">
+          <h1 id="quoteText" style="font-size:2.5em; text-shadow:0 0 20px pink;"></h1>
+          <img id="gifImg" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTRyMnp6bnBqMnc1MnI0bzVqYnM1ajVsNnB2aW5wbTV6NDljOGdyeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Zl7u48zLVFgLpRwq6f/giphy.gif" alt="Love Gif" style="margin:20px; width:200px;">
+          <br>
+          <button id="finalBtn" style="padding:12px 24px; font-size:18px; background:#ff4d6d; color:white; border:none; border-radius:8px; cursor:pointer;">
+            Forever Together 💍💖
+          </button>
+        </div>
+      `;
+
+            const quoteText = document.getElementById("quoteText");
+
+            function showQuote() {
+                quoteText.style.opacity = 0;
+                setTimeout(() => {
+                    quoteText.innerHTML = quotes[index];
+                    document.body.style.background = backgrounds[index];
+                    quoteText.style.opacity = 1;
+                    index++;
+                    if (index < quotes.length) {
+                        setTimeout(showQuote, 4000);
+                    }
+                }, 1000);
+            }
+            showQuote();
+
+            // Final button leads to surprise page
+            setTimeout(() => {
+                document.getElementById("finalBtn").addEventListener("click", () => {
+                    document.body.innerHTML = `
+            <div style="text-align:center; margin-top:100px; color:white;">
+              <h1 style="font-size:3em; text-shadow:0 0 30px red;">
+                💖 Forever & Always 💖 <br> You are my everything 🌹✨
+              </h1>
+              <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYTRyMnp6bnBqMnc1MnI0bzVqYnM1ajVsNnB2aW5wbTV6NDljOGdyeSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ytu2GUYbvhz7zShGwS/giphy.gif" style="margin:20px; width:250px;">
+              <p style="font-size:1.5em; margin-top:20px;">Love is not just a word, it’s our story 💕📖</p>
+            </div>
+          `;
+                    document.body.style.background = "linear-gradient(135deg, #ff758c, #ff7eb3, #ffdde1)";
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
